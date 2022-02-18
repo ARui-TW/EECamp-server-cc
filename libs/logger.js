@@ -1,5 +1,5 @@
 // libs/logger.js
-const winston = require("winston");
+import winston from "winston";
 
 const colorizer = winston.format.colorize();
 
@@ -30,4 +30,4 @@ const logger = winston.createLogger({
     ],
 });
 
-module.exports = logger;
+export default logger;

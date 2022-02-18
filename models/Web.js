@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const pageImage = mongoose.Schema({
+const pageImage = new mongoose.Schema({
     url: {
         type: String,
         required: false,
@@ -11,7 +11,7 @@ const pageImage = mongoose.Schema({
     },
 });
 
-const FAQ = mongoose.Schema({
+const FAQ = new mongoose.Schema({
     Ques: {
         type: String,
         required: false,
@@ -22,7 +22,7 @@ const FAQ = mongoose.Schema({
     },
 });
 
-const WebSchema = mongoose.Schema({
+const WebSchema = new mongoose.Schema({
     logo: {
         type: String,
         required: false,
