@@ -23,7 +23,7 @@ mongoose.connect(process.env.DB_CONNECTION, () => {
 app.use(express.json());
 
 // Router
-app.use(router);
+app.use("/api", router);
 
 //GET
 app.get("/", (req, res) => {

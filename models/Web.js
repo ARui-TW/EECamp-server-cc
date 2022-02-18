@@ -115,4 +115,4 @@ const WebSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model("Web", WebSchema);
+export default mongoose.model("Web", WebSchema);
