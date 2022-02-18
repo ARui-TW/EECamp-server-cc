@@ -113,10 +113,10 @@ const UserSchema = new mongoose.Schema({
 UserSchema.index({ created_at: 1 });
 
 UserSchema.pre("save", function (next) {
-    if (!this.isModified("email")) return next;
-    bcrypt.hash(this.email, 10, (err, emailHash) => {
+    if (!this.isModified("idNumber")) return next;
+    bcrypt.hash(this.idNumber, 10, (err, idNumberHash) => {
         if (err) return next(err);
-        this.email = emailHash;
+        this.idNumber = idNumberHash;
         next();
     });
 });

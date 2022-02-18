@@ -158,10 +158,10 @@ const userController = {
     },
     async login(req, res) {
         const rule = {
-            chineseName: {
+            email: {
                 type: "string",
             },
-            email: {
+            idNumber: {
                 type: "string",
             },
         };

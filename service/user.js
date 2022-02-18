@@ -19,7 +19,11 @@ const userService = {
                 idNumber: params.idNumber,
             });
 
-            if (idExist) {
+            const emailExist = await UserSchema.findOne({
+                email: params.email,
+            });
+
+            if (idExist || emailExist) {
                 // logger.error(
                 //     "[User Service] Failed to create user to database: already exist"
                 // );
@@ -109,10 +113,10 @@ const userService = {
         }
     },
     async login(params) {
-        const { chineseName, email } = params;
+        const { email, idNumber } = params;
         try {
-            const user = await UserSchema.findOne({ chineseName }).lean();
-            const result = await bcrypt.compare(email, user.email);
+            const user = await UserSchema.findOne({ email }).lean();
+            const result = await bcrypt.compare(idNumber, user.idNumber);
             if (result) {
                 logger.info("[User Service] Correct username");
                 // return `Congrats, you login!!!`;
