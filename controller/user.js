@@ -41,7 +41,7 @@ const userController = {
 
         try {
             validator.validate(req.body, rule);
-            const user = await service.user.findOne(req.body);
+            const user = await service.findOne(req.body);
             res.json(user);
         } catch (error) {
             logger.error("[User Controller] Failed to getUser:", error);
@@ -111,10 +111,41 @@ const userController = {
         try {
             validator.validate(req.body, rule);
             const user = await service.deleteOne(req.body);
-            res.json(user);
+            res.json({ success: true });
         } catch (error) {
             logger.error("[User Controller] Failed to removeUser:", error);
             res.status(400).json({ message: `Failed to removeUser, ${error}` });
+        }
+    },
+    async removeUsers(req, res) {
+        const rule = {
+            filter: {
+                type: "object",
+                optional: true,
+            },
+            limit: {
+                type: "number",
+                optional: true,
+            },
+            skip: {
+                type: "number",
+                optional: true,
+            },
+            sort: {
+                type: "object",
+                optional: true,
+            },
+        };
+
+        try {
+            validator.validate(req.body, rule);
+            const user = await service.deleteAll(req.body);
+            res.json({ success: true });
+        } catch (error) {
+            logger.error("[User Controller] Failed to removeUsers:", error);
+            res.status(400).json({
+                message: `Failed to removeUsers, ${error}`,
+            });
         }
     },
     async login(req, res) {

@@ -54,9 +54,11 @@ const userService = {
         try {
             const projection = { password: false };
             const total = await UserSchema.countDocuments(filter).lean();
-            const data = await User.user
-                .find(filter, projection, { limit, skip, sort })
-                .lean();
+            const data = await UserSchema.find(filter, projection, {
+                limit,
+                skip,
+                sort,
+            }).lean();
             logger.info("[User Service] Find users successfully");
             return { total, data };
         } catch (error) {
@@ -93,6 +95,16 @@ const userService = {
             throw new Error(`Failed to delete user in database, ${error}`);
         }
     },
+    async deleteAll(filter) {
+        try {
+            const result = await UserSchema.deleteMany(filter).lean();
+            logger.info("[User Service] Delete all users successfully");
+            return result.n > 0 ? { success: true } : {};
+        } catch (error) {
+            logger.error("[User Service]", error);
+            throw new Error(`Failed to delete all users in database, ${error}`);
+        }
+    },
     async login(params) {
         const { chineseName, email } = params;
         try {
@@ -105,7 +117,8 @@ const userService = {
                     { _id: user._id, chineseName: user.chineseName },
                     jwtKey
                 );
-                return { token };
+                // return { token };
+                return { success: user._id };
             }
             return { success: false };
         } catch (error) {

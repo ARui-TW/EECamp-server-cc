@@ -9,5 +9,6 @@ userRouter.post("/login", userController.login);
 userRouter.post("/getUser", userController.getUser);
 userRouter.post("/getUsers", userController.getUsers);
 userRouter.post("/removeUser", userController.removeUser);
+userRouter.post("/removeUsers", userController.removeUsers);
 
 export default userRouter;
