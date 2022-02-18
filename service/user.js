@@ -117,8 +117,7 @@ const userService = {
                     { _id: user._id, chineseName: user.chineseName },
                     jwtKey
                 );
-                // return { token };
-                return { success: user._id };
+                return { token: token, _id: user._id };
             }
             return { success: false };
         } catch (error) {

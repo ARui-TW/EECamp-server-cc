@@ -161,7 +161,7 @@ const userController = {
         try {
             validator.validate(req.body, rule);
             const user = await service.login(req.body);
-            res.json(user);
+            res.header("authorization", user.token).json({ success: user._id });
         } catch (error) {
             logger.error("[User Controller] Failed to login:", error);
             res.status(400).json({ message: `Failed to login, ${error}` });
