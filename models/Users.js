@@ -102,6 +102,12 @@ const UserSchema = new mongoose.Schema({
     //     type: String,
     //     required: false,
     // },
+    status: {
+        type: String,
+        required: true,
+        // notChosen / maybeChosen / Chosen
+        default: "notChosen",
+    },
 });
 
 UserSchema.index({ created_at: 1 });
