@@ -184,6 +184,24 @@ const userController = {
             res.status(400).json({ message: "Hello, not logged in yet." });
         }
     },
+    async getUsersStatus(req, res) {
+        try {
+            const user = await service.findAll({
+                filter: {
+                    status: { $in: ["chosen", "maybeChosen"] },
+                },
+            });
+
+            res.json(
+                user.data.map((x) => {
+                    return x.chineseName;
+                })
+            );
+        } catch (error) {
+            logger.error("[User Controller] Failed to getUsers:", error);
+            res.status(400).json({ message: `Failed to getUsers, ${error}` });
+        }
+    },
 };
 
 export default userController;

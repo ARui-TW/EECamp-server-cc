@@ -1,10 +1,3 @@
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const config = require("./libs/config");
-// const logger = require("./libs/logger");
-// const router = require("./routes/api");
-// require("dotenv/config");
-
 import express from "express";
 import mongoose from "mongoose";
 import logger from "./libs/logger.js";

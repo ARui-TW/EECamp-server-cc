@@ -18,6 +18,7 @@ userRouter.post(
 );
 userRouter.post("/getUser", userController.getUser);
 userRouter.post("/getUsers", userController.getUsers);
+userRouter.post("/getUsersStatus", userController.getUsersStatus);
 userRouter.post("/removeUser", userController.removeUser);
 userRouter.post("/removeUsers", userController.removeUsers);
 

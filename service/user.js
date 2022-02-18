@@ -59,6 +59,7 @@ const userService = {
                 skip,
                 sort,
             }).lean();
+
             logger.info("[User Service] Find users successfully");
             return { total, data };
         } catch (error) {
