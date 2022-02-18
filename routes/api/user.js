@@ -11,6 +11,11 @@ userRouter.post(
     userController.getCurrentUser
 );
 userRouter.post("/login", userController.login);
+userRouter.post(
+    "/modifyCurrentUser",
+    authentication(),
+    userController.modifyCurrentUser
+);
 userRouter.post("/getUser", userController.getUser);
 userRouter.post("/getUsers", userController.getUsers);
 userRouter.post("/removeUser", userController.removeUser);

@@ -14,18 +14,11 @@ const jwtKey = process.env.JWT_KEY;
 const authenticationMiddleware =
     (stricted = true) =>
     async (req, res, next) => {
-        const auth = req.header("authorization");
-        // if (auth && auth.startsWith("Bearer ")) {
-        if (auth) {
+        const auth = req.headers.authorization;
+        console.log(auth);
+        if (auth && auth.startsWith("Bearer ")) {
             try {
-                // const token = auth.slice(7);
-                const token = auth;
-                // const payload = await new Promise((resolve, reject) => {
-                //     jwt.verify(token, jwtKey, (error, decoded) => {
-                //         if (error) reject(error);
-                //         resolve(decoded);
-                //     });
-                // });
+                const token = auth.slice(7);
                 const payload = jwt.verify(token, jwtKey);
 
                 req.user = payload;

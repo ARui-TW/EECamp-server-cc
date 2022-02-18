@@ -66,25 +66,27 @@ const userService = {
             throw new Error(`Failed to find users in database, ${error}`);
         }
     },
-    // async updateOne(params) {
-    //     // TODO: add hashPassword
-    //     const { _id } = params;
-    //     if (params.password) {
-    //         const salt = await bcrypt.genSalt(saltRound);
-    //         const hashPassword = await Bcrypt.hash(params.password, salt);
-    //         // eslint-disable-next-line no-param-reassign
-    //         params.password = hashPassword;
-    //     }
+    async updateOne(params) {
+        // const { _id } = params;
+        // if (params.password) {
+        //     const salt = await bcrypt.genSalt(saltRound);
+        //     const hashPassword = await Bcrypt.hash(params.password, salt);
+        //     // eslint-disable-next-line no-param-reassign
+        //     params.password = hashPassword;
+        // }
 
-    //     try {
-    //         const result = await UserSchema.updateOne({ _id }, params).lean();
-    //         logger.info("[User Service] Update user successfully");
-    //         return result.n > 0 ? { success: true } : {};
-    //     } catch (error) {
-    //         logger.error("[User Service]", error);
-    //         throw new Error(`Failed to update user in database, ${error}`);
-    //     }
-    // },
+        try {
+            const result = await UserSchema.updateOne(
+                { _id: params._id },
+                params.body
+            ).lean();
+            logger.info("[User Service] Update user successfully");
+            return result;
+        } catch (error) {
+            logger.error("[User Service]", error);
+            throw new Error(`Failed to update user in database, ${error}`);
+        }
+    },
     async deleteOne(filter) {
         try {
             const result = await UserSchema.deleteOne(filter).lean();
@@ -117,7 +119,7 @@ const userService = {
                     { _id: user._id, chineseName: user.chineseName },
                     jwtKey
                 );
-                return { token: token, _id: user._id };
+                return token;
             }
             return { success: false };
         } catch (error) {

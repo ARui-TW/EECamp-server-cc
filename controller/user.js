@@ -78,31 +78,39 @@ const userController = {
             res.status(400).json({ message: `Failed to getUsers, ${error}` });
         }
     },
-    // async modifyUser(req, res) {
-    //     const rule = {
-    //         _id: idRule,
-    //         username: {
-    //             type: "forbidden",
-    //         },
-    //         password: {
-    //             type: "string",
-    //             allowEmpty: false,
-    //             min: 4,
-    //         },
-    //         company: {
-    //             type: "forbidden",
-    //         },
-    //     };
+    async modifyCurrentUser(req, res) {
+        // const rule = {
+        //     _id: idRule,
+        //     username: {
+        //         type: "forbidden",
+        //     },
+        //     password: {
+        //         type: "string",
+        //         allowEmpty: false,
+        //         min: 4,
+        //     },
+        //     company: {
+        //         type: "forbidden",
+        //     },
+        // };
 
-    //     try {
-    //         validator.validate(req.body, rule);
-    //         const user = await service.updateOne(req.body);
-    //         res.json(user.n > 0 ? { success: true } : {});
-    //     } catch (error) {
-    //         logger.error("[User Controller] Failed to modifyUser:", error);
-    //         res.status(400).json({ message: `Failed to modifyUser, ${error}` });
-    //     }
-    // },
+        try {
+            // validator.validate(req.body, rule);
+
+            // modify
+            const user = await service.updateOne({
+                body: req.body,
+                _id: req.user._id,
+            });
+
+            // find the modified one
+            const userINFO = await service.findOne({ _id: req.user._id });
+            res.json(userINFO);
+        } catch (error) {
+            logger.error("[User Controller] Failed to modifyUser:", error);
+            res.status(400).json({ message: `Failed to modifyUser, ${error}` });
+        }
+    },
     async removeUser(req, res) {
         const rule = {
             _id: idRule,
@@ -161,7 +169,8 @@ const userController = {
         try {
             validator.validate(req.body, rule);
             const user = await service.login(req.body);
-            res.header("authorization", user.token).json({ success: user._id });
+            // res.header("authorization", user.token).json({ success: user._id });
+            res.json(user);
         } catch (error) {
             logger.error("[User Controller] Failed to login:", error);
             res.status(400).json({ message: `Failed to login, ${error}` });
