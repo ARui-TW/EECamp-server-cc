@@ -4,8 +4,11 @@
   "description": "backend for NTHUEECAMP",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=dev node app.js",
-    "dev": "nodemon app.js"
+    "start": "cross-env node app.js",
+    "dev": "npm run docker-compose-dev:up && cross-env NODE_ENV=dev nodemon --es-module-specifier-resolution=node app.js",
+    "docker-compose-dev:up": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker-compose-dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "lint": "npx eslint --fix '**/*.js"
   },
   "type": "module",
   "author": "",
