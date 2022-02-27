@@ -2,18 +2,86 @@ import logger from '../libs/logger';
 import service from '../service';
 import validator from '../libs/validator';
 
-const idRule = {
-  type: 'multi',
-  rules: [{ type: 'string' }, { type: 'object' }],
-};
 const webController = {
   async createWebsite(req, res) {
+    const rule = {
+      FAQ: {
+        type: 'array',
+        items: {
+          type: 'object',
+          $$strict: true,
+          props: {
+            Ques: {
+              type: 'string',
+              empty: false,
+            },
+            Ans: {
+              type: 'string',
+              empty: false,
+            },
+          },
+        },
+      },
+      campName: {
+        type: 'string',
+      },
+      campPeople: {
+        type: 'number',
+      },
+      campTime: {
+        type: 'string',
+      },
+      campRegister: {
+        type: 'string',
+      },
+      convenor: {
+        type: 'string',
+      },
+      convenorPhone: {
+        type: 'number',
+      },
+      inCharge: {
+        type: 'string',
+      },
+      inChargePhone: {
+        type: 'number',
+      },
+      remittanceAccName: {
+        type: 'string',
+      },
+      registerFee: {
+        type: 'number',
+      },
+      AnnounceTime: {
+        type: 'string',
+      },
+      remittanceTime: {
+        type: 'string',
+      },
+      refundFifty: {
+        type: 'string',
+      },
+      refundTwenty: {
+        type: 'string',
+      },
+      RecapVlog: {
+        type: 'url',
+      },
+      albumSite: {
+        type: 'url',
+      },
+      RegisterStatus: {
+        type: 'enum',
+        values: ['register', 'fillingUp', 'done'],
+      },
+    };
     const num = await service.web.getCount();
 
     try {
       if (num > 0) {
         throw new Error('Website has been created');
       }
+      validator.validate(req.body, rule);
       const result = await service.web.create(req.body);
       res.json(result);
     } catch (error) {
@@ -44,7 +112,9 @@ const webController = {
     try {
       validator.validate(req.body, rule);
       const result = await service.web.findOne(req.body);
-      if (result.total !== 1) { throw new Error('Web total is not 1'); }
+      if (result.total < 1) { throw new Error('Web is not created.'); } else if (result.total > 1) {
+        throw new Error('Web is more than 1');
+      }
       res.json(result.data);
     } catch (error) {
       logger.error('[Web Controller] Failed to getWebsite:', error);
@@ -54,7 +124,96 @@ const webController = {
 
   async modifyWebsite(req, res) {
     try {
-      // validator.validate(req.body, rule);
+      const rule = {
+        FAQ: {
+          type: 'array',
+          items: {
+            type: 'object',
+            $$strict: true,
+            props: {
+              Ques: {
+                type: 'string',
+                empty: false,
+              },
+              Ans: {
+                type: 'string',
+                empty: false,
+              },
+            },
+          },
+          optional: true,
+        },
+        campName: {
+          type: 'string',
+          optional: true,
+        },
+        campPeople: {
+          type: 'number',
+          optional: true,
+        },
+        campTime: {
+          type: 'string',
+          optional: true,
+        },
+        campRegister: {
+          type: 'string',
+          optional: true,
+        },
+        convenor: {
+          type: 'string',
+          optional: true,
+        },
+        convenorPhone: {
+          type: 'number',
+          optional: true,
+        },
+        inCharge: {
+          type: 'string',
+          optional: true,
+        },
+        inChargePhone: {
+          type: 'number',
+          optional: true,
+        },
+        remittanceAccName: {
+          type: 'string',
+          optional: true,
+        },
+        registerFee: {
+          type: 'number',
+          optional: true,
+        },
+        AnnounceTime: {
+          type: 'string',
+          optional: true,
+        },
+        remittanceTime: {
+          type: 'string',
+          optional: true,
+        },
+        refundFifty: {
+          type: 'string',
+          optional: true,
+        },
+        refundTwenty: {
+          type: 'string',
+          optional: true,
+        },
+        RecapVlog: {
+          type: 'url',
+          optional: true,
+        },
+        albumSite: {
+          type: 'url',
+          optional: true,
+        },
+        RegisterStatus: {
+          type: 'enum',
+          values: ['register', 'fillingUp', 'done'],
+          optional: true,
+        },
+      };
+      validator.validate(req.body, rule);
 
       const result = await service.web.updateOne(req.body);
       res.json(result);

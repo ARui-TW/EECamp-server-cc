@@ -1,16 +1,5 @@
 import mongoose from 'mongoose';
 
-const pageImage = new mongoose.Schema({
-  url: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-});
-
 const FAQ = new mongoose.Schema({
   Ques: {
     type: String,
@@ -23,20 +12,8 @@ const FAQ = new mongoose.Schema({
 });
 
 const WebSchema = new mongoose.Schema({
-  logo: {
-    type: String,
-    required: true,
-  },
-  frontPageImage: {
-    type: [pageImage],
-    required: true,
-  },
   FAQ: {
     type: [FAQ],
-    required: true,
-  },
-  shirtImage: {
-    type: String,
     required: true,
   },
   campName: {
