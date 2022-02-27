@@ -4,7 +4,7 @@ import logger from '../libs/logger';
 const webService = {
   async create(params) {
     try {
-      const result = await model.web.create(params);
+      const result = await model.Web.create(params);
       logger.info('[Web Service] Create web successfully');
       return result;
     } catch (error) {
@@ -13,13 +13,13 @@ const webService = {
     }
   },
   async getCount() {
-    const count = await model.web.count();
+    const count = await model.Web.count();
     return count;
   },
   async findOne() {
     try {
-      const total = await model.web.countDocuments().lean();
-      const data = await model.web.findOne().lean();
+      const total = await model.Web.countDocuments().lean();
+      const data = await model.Web.findOne().lean();
 
       logger.info('[Web Service] Find webs successfully');
       return { total, data };
@@ -38,7 +38,7 @@ const webService = {
     // }
 
     try {
-      const result = await model.web.updateOne({}, params).lean();
+      const result = await model.Web.updateOne({}, params).lean();
       return result.modifiedCount > 0 ? { success: true } : { success: false };
     } catch (error) {
       logger.error('[Web Service]', error);

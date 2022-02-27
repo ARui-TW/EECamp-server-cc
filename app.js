@@ -11,6 +11,8 @@ connectMongo();
 
 // Body Parser
 app.use(express.json());
+app.use(express.raw({ type: 'image/*', limit: '15mb' }));
+app.use('/public', express.static('public'));
 
 // Router
 app.use(router);
