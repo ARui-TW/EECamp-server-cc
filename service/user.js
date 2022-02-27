@@ -1,36 +1,16 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import UserSchema from '../models/Users.js';
-import logger from '../libs/logger.js';
+import fs from 'fs';
+import model from '../models';
+import logger from '../libs/logger';
 
-const jwtKey = process.env.JWT_KEY;
-const saltRound = 10;
+const privateKeyLocation = process.env.PRIVATE_KEY_LOCATION;
+const rootDir = process.cwd();
+const privateKey = fs.readFileSync(`${rootDir}${privateKeyLocation}`);
 
 const userService = {
   async create(params) {
     try {
-      // const salt = await bcrypt.genSalt(saltRound);
-      // const hashPassword = await bcrypt.hash(params.password, salt);
-      // // eslint-disable-next-line no-param-reassign
-      // params.password = hashPassword;
-
-      // Check if the user is already registered
-      const idExist = await UserSchema.findOne({
-        idNumber: params.idNumber,
-      });
-
-      const emailExist = await UserSchema.findOne({
-        email: params.email,
-      });
-
-      if (idExist || emailExist) {
-        // logger.error(
-        //     "[User Service] Failed to create user to database: already exist"
-        // );
-        return { message: 'user already registered' };
-      }
-
-      const result = await UserSchema.create(params);
+      const result = await model.Users.create(params);
       logger.info('[User Service] Create user successfully');
       return result;
     } catch (error) {
@@ -41,7 +21,7 @@ const userService = {
   async findOne(filter) {
     try {
       const projection = { password: false };
-      const result = await UserSchema.findOne(filter, projection).lean();
+      const result = await model.Users.findOne(filter, projection).lean();
       logger.info('[User Service] Find user successfully');
       return result;
     } catch (error) {
@@ -51,17 +31,16 @@ const userService = {
   },
   async findAll(params) {
     const {
-      filter, limit, skip, sort = { order: -1 },
+      projection, filter, limit, skip, sort = { order: -1 },
     } = params;
 
     try {
-      const projection = { password: false };
-      const total = await UserSchema.countDocuments(filter).lean();
-      const data = await UserSchema.find(filter, projection, {
+      const total = await model.Users.countDocuments(filter).lean();
+      const data = await model.Users.find(filter, projection, {
         limit,
         skip,
         sort,
-      }).lean();
+      }).select().lean();
 
       logger.info('[User Service] Find users successfully');
       return { total, data };
@@ -71,21 +50,14 @@ const userService = {
     }
   },
   async updateOne(params) {
-    // const { _id } = params;
-    // if (params.password) {
-    //     const salt = await bcrypt.genSalt(saltRound);
-    //     const hashPassword = await Bcrypt.hash(params.password, salt);
-    //     // eslint-disable-next-line no-param-reassign
-    //     params.password = hashPassword;
-    // }
-
     try {
-      const result = await UserSchema.updateOne(
+      const result = await model.Users.updateOne(
+        // eslint-disable-next-line no-underscore-dangle
         { _id: params._id },
         params.body,
       ).lean();
       logger.info('[User Service] Update user successfully');
-      return result;
+      return { success: result.acknowledged };
     } catch (error) {
       logger.error('[User Service]', error);
       throw new Error(`Failed to update user in database, ${error}`);
@@ -93,39 +65,57 @@ const userService = {
   },
   async deleteOne(filter) {
     try {
-      const result = await UserSchema.deleteOne(filter).lean();
+      const result = await model.Users.deleteOne(filter).lean();
       logger.info('[User Service] Delete user successfully');
-      return result.n > 0 ? { success: true } : {};
+      return { success: result.deletedCount > 0 };
     } catch (error) {
       logger.error('[User Service]', error);
       throw new Error(`Failed to delete user in database, ${error}`);
     }
   },
-  async deleteAll(filter) {
+  async deleteAll(params) {
+    const {
+      filter, limit, skip, sort = { order: -1 },
+    } = params;
+
     try {
-      const result = await UserSchema.deleteMany(filter).lean();
+      const result = await model.Users.deleteMany(filter, {
+        limit,
+        skip,
+        sort,
+      }).lean();
       logger.info('[User Service] Delete all users successfully');
-      return result.n > 0 ? { success: true } : {};
+      return result;
     } catch (error) {
       logger.error('[User Service]', error);
       throw new Error(`Failed to delete all users in database, ${error}`);
     }
   },
+  async userExist(params, expectedId = null) {
+    const { personalID, email } = params;
+
+    const result = await model.Users.countDocuments({
+      _id: {
+        $ne: expectedId,
+      },
+      $or: [{ personalID }, { email }],
+    });
+
+    return result > 0;
+  },
   async login(params) {
-    const { email, idNumber } = params;
+    const { email, personalID } = params;
     try {
-      const user = await UserSchema.findOne({ email }).lean();
-      const result = await bcrypt.compare(idNumber, user.idNumber);
-      if (result) {
-        logger.info('[User Service] Correct username');
-        // return `Congrats, you login!!!`;
+      const user = await model.Users.findOne({ email }).lean();
+      if (user.personalID === personalID) {
         const token = jwt.sign(
-          { _id: user._id, chineseName: user.chineseName },
-          jwtKey,
+          // eslint-disable-next-line no-underscore-dangle
+          { _id: user._id, isAdmin: user.isAdmin },
+          privateKey,
+          { algorithm: 'RS256' },
         );
-        return token;
-      }
-      return { success: false };
+        return { token };
+      } return { success: false };
     } catch (error) {
       logger.error('[User Service]', error);
       throw new Error('Invalid user login data');

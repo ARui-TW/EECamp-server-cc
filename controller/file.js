@@ -41,6 +41,22 @@ const fileController = {
       res.status(400).json({ message: `Failed to upload file, ${error}` });
     }
   },
+  async save(req, res) {
+    const { filename: fileName } = req.headers;
+
+    const params = {
+      data: req.body,
+      fileName,
+    };
+
+    try {
+      const savedImage = await service.file.saveOne(params);
+      res.send(savedImage);
+    } catch (error) {
+      logger.error('[File Controller] Failed to upload file:', error);
+      res.status(400).json({ message: `Failed to upload file, ${error}` });
+    }
+  },
   async getFile(req, res) {
     const rule = {
       _id: idRule,

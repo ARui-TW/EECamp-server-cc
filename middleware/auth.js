@@ -1,29 +1,29 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import config from '../libs/config';
+import fs from 'fs';
 import logger from '../libs/logger';
 
-dotenv.config();
-
-const jwtKey = process.env.JWT_KEY;
+const publicKeyLocation = process.env.PUBLIC_KEY_LOCATION;
+const rootDir = process.cwd();
+const publicKey = fs.readFileSync(`${rootDir}${publicKeyLocation}`);
 
 /**
  * Generate and return an authentication middleware with `stricted` parameter
  * @param {Boolean} stricted whether it is necessary to carried jwt or not
  */
-const authenticationMiddleware = (stricted = true) => async (req, res, next) => {
+const AuthenticationMiddleware = (checkAdmin, stricted = true) => async (req, res, next) => {
   const auth = req.headers.authorization;
-  console.log(auth);
   if (auth && auth.startsWith('Bearer ')) {
     try {
       const token = auth.slice(7);
-      const payload = jwt.verify(token, jwtKey);
+      const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
+
+      if (!payload.isAdmin && checkAdmin) { throw new Error('User not Admin'); }
 
       req.user = payload;
       next();
     } catch (error) {
       logger.error(
-        '[Authentication Middleware] Authentifaction failed, invalid token.',
+        `[Authentication Middleware] Authentifaction failed, invalid token, error: ${error}.`,
       );
       res.status(401).json({ message: 'Authentication failed.' });
     }
@@ -38,4 +38,4 @@ const authenticationMiddleware = (stricted = true) => async (req, res, next) => 
   }
 };
 
-export default authenticationMiddleware;
+export default AuthenticationMiddleware;

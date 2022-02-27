@@ -25,6 +25,24 @@ const fileService = {
       throw new Error(`Failed to create web database, ${error}`);
     }
   },
+  async saveOne(params) {
+    try {
+      const {
+        data, fileName,
+      } = params;
+      const rootDir = process.cwd();
+      const path = `/public/${uuidv4()}_${fileName}`;
+      fs.writeFileSync(`${rootDir}${path}`, data);
+      logger.info('[File Service] Save one success');
+      return { path };
+    } catch (error) {
+      logger.error(
+        '[File Service] Failed to save file to database:',
+        error,
+      );
+      throw new Error(`Failed to create web database, ${error}`);
+    }
+  },
   async findOne(filter) {
     try {
       const result = await model.File.findOne(filter).lean();

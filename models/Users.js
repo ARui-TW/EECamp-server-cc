@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
 
 const UserSchema = new mongoose.Schema({
   isAdmin: {
@@ -10,7 +9,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  idNumber: {
+  photoPath: {
+    type: String,
+    required: true,
+  },
+  personalID: {
     type: String,
     required: true,
   },
@@ -68,6 +71,7 @@ const UserSchema = new mongoose.Schema({
   },
   shirtSize: {
     type: String,
+    enum: ['XS', 'S', 'M', 'L', 'XL', '2L', '3L', '4L', '5L'],
     required: true,
   },
   vegan: {
@@ -104,31 +108,16 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
     type: String,
+    enum: ['NotChosen', 'Alternate', 'Paid', 'Unpaid', 'GaveUp'],
     required: true,
-    // notChosen / maybeChosen / Chosen
-    default: 'notChosen',
+    default: 'NotChosen',
+  },
+  alternateNum: {
+    type: Number,
+    required: false,
   },
 });
 
-UserSchema.index({ created_at: 1 });
-
-UserSchema.pre('save', function (next) {
-  if (!this.isModified('idNumber')) return next;
-  bcrypt.hash(this.idNumber, 10, (err, idNumberHash) => {
-    if (err) return next(err);
-    this.idNumber = idNumberHash;
-    next();
-  });
-});
-
-// UserSchema.methods.comparePassword = function (password, callback) {
-//     bcrypt.compare(password, this.email, (err, isMatch) => {
-//         if (err) return callback(err);
-//         else {
-//             if (!isMatch) return callback(null, isMatch);
-//             return callback(null, this);
-//         }
-//     });
-// };
+UserSchema.index({ status: 1 });
 
 export default mongoose.model('User', UserSchema);
