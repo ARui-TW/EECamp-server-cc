@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const photoSchema = new mongoose.Schema({
+const fileSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -11,15 +11,15 @@ const photoSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    default: '',
   },
   type: {
     type: String,
-    enum: ['FrontPage', 'Shirt'],
+    enum: ['FrontPage', 'Shirt', 'Consent'],
     required: true,
   },
 });
 
 // Image is a model which has a schema imageSchema
 
-export default mongoose.model('Photo', photoSchema);
+export default mongoose.model('File', fileSchema);

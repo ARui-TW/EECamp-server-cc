@@ -1,9 +1,9 @@
 import web from './web';
 import user from './user';
-import photo from './photo';
+import file from './file';
 
 export default {
   web,
   user,
-  photo,
+  file,
 };
