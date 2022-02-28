@@ -46,11 +46,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   homeNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   emergencyName: {
@@ -58,11 +58,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   emergencyPhoneNumber: {
-    type: Number,
+    type: String,
     required: true,
   },
   zipCode: {
-    type: Number,
+    type: String,
     required: true,
   },
   address: {
