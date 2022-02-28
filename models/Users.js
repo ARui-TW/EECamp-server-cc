@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     required: true,
+    default: false,
   },
   chineseName: {
     type: String,
@@ -31,10 +32,12 @@ const UserSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
+    enum: ['男', '女'],
     required: true,
   },
   bloodType: {
     type: String,
+    enum: ['A', 'B', 'AB', 'O', '未驗血'],
     required: true,
   },
   school: {
@@ -43,6 +46,7 @@ const UserSchema = new mongoose.Schema({
   },
   grade: {
     type: String,
+    enum: ['一年級', '二年級', '三年級'],
     required: true,
   },
   homeNumber: {

@@ -14,7 +14,7 @@ const userController = {
   async register(req, res) {
     const rule = {
       isAdmin: {
-        type: 'boolean',
+        type: 'forbidden',
       },
       chineseName: {
         type: 'string',
