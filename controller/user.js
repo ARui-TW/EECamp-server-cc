@@ -535,10 +535,30 @@ const userController = {
     }
   },
   async getUsersStatus(req, res) {
+    const rule = {
+      filter: {
+        type: 'object',
+        optional: true,
+      },
+      limit: {
+        type: 'number',
+        optional: true,
+      },
+      skip: {
+        type: 'number',
+        optional: true,
+      },
+      sort: {
+        type: 'object',
+        optional: true,
+      },
+    };
     try {
+      validator.validate(req.body, rule);
+      req.body.filter = { ...req.body.filter, isAdmin: false };
       const user = await service.user.findAll({
         projection: 'chineseName status alternateNum',
-        filter: { },
+        ...req.body,
       });
 
       res.json(user);

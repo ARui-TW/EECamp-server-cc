@@ -37,7 +37,7 @@ const WebSchema = new mongoose.Schema({
     required: true,
   },
   convenorPhone: {
-    type: Number,
+    type: String,
     required: true,
   },
   inCharge: {
@@ -45,7 +45,7 @@ const WebSchema = new mongoose.Schema({
     required: true,
   },
   inChargePhone: {
-    type: Number,
+    type: String,
     required: true,
   },
   remittanceAccName: {

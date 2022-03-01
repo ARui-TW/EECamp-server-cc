@@ -38,13 +38,13 @@ const webController = {
         type: 'string',
       },
       convenorPhone: {
-        type: 'number',
+        type: 'string',
       },
       inCharge: {
         type: 'string',
       },
       inChargePhone: {
-        type: 'number',
+        type: 'string',
       },
       remittanceAccName: {
         type: 'string',
@@ -164,7 +164,7 @@ const webController = {
           optional: true,
         },
         convenorPhone: {
-          type: 'number',
+          type: 'string',
           optional: true,
         },
         inCharge: {
@@ -172,7 +172,7 @@ const webController = {
           optional: true,
         },
         inChargePhone: {
-          type: 'number',
+          type: 'string',
           optional: true,
         },
         remittanceAccName: {
