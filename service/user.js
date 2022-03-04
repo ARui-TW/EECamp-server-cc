@@ -40,7 +40,7 @@ const userService = {
         limit,
         skip,
         sort,
-      }).select().lean();
+      }).lean();
 
       logger.info('[User Service] Find users successfully');
       return { total, data };
