@@ -77,15 +77,14 @@ const userService = {
   },
   async deleteAll(params) {
     const {
-      filter, limit, skip, sort = { order: -1 },
+      filter, data,
     } = params;
 
     try {
-      const result = await model.Users.deleteMany(filter, {
-        limit,
-        skip,
-        sort,
-      }).lean();
+      data.forEach((x) => {
+        unlinkSync(path.join(process.cwd(), x.photoPath));
+      });
+      const result = await model.Users.deleteMany(filter).lean();
       logger.info('[User Service] Delete all users successfully');
       return result;
     } catch (error) {

@@ -483,23 +483,17 @@ const userController = {
         type: 'object',
         optional: true,
       },
-      limit: {
-        type: 'number',
-        optional: true,
-      },
-      skip: {
-        type: 'number',
-        optional: true,
-      },
-      sort: {
-        type: 'object',
-        optional: true,
-      },
     };
 
     try {
       validator.validate(req.body, rule);
       req.body.filter = { ...req.body.filter, isAdmin: false };
+      const users = await service.user.findAll({
+        projection: 'photoPath',
+        ...req.body,
+      });
+      req.body.data = users.data;
+
       const result = await service.user.deleteAll(req.body);
       res.json(result);
     } catch (error) {
