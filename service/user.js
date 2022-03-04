@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
+import fs, { unlinkSync } from 'fs';
+import path from 'path';
 import model from '../models';
 import logger from '../libs/logger';
 
@@ -65,6 +66,7 @@ const userService = {
   },
   async deleteOne(filter) {
     try {
+      unlinkSync(path.join(process.cwd(), filter.photoPath));
       const result = await model.Users.deleteOne(filter).lean();
       logger.info('[User Service] Delete user successfully');
       return { success: result.deletedCount > 0 };

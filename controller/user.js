@@ -2,6 +2,7 @@ import {
   isNationalIdentificationNumberValid, isResidentCertificateNumberValid,
   isNewResidentCertificateNumberValid,
 } from 'taiwan-id-validator';
+import path from 'path';
 import logger from '../libs/logger';
 import service from '../service';
 import validator from '../libs/validator';
@@ -466,6 +467,9 @@ const userController = {
 
     try {
       validator.validate(req.body, rule);
+      const user = await service.user.findOne(req.body);
+      const { photoPath } = user;
+      req.body = { ...req.body, photoPath };
       const result = await service.user.deleteOne(req.body);
       res.json(result);
     } catch (error) {
