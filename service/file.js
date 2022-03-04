@@ -1,5 +1,7 @@
-import fs from 'fs';
+import fs, { unlink, unlinkSync } from 'fs';
+import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import res from 'express/lib/response';
 import model from '../models';
 import logger from '../libs/logger';
 
@@ -83,6 +85,9 @@ const fileService = {
   async deleteOne(filter) {
     try {
       const result = await model.File.deleteOne(filter).lean();
+      unlinkSync(path.join(process.cwd(), filter.path), (e) => {
+        if (e) throw e;
+      });
       logger.info('[File Service] Delete file successfully');
       return result.deletedCount > 0 ? { success: true } : { success: false };
     } catch (error) {
