@@ -493,7 +493,6 @@ const userController = {
         ...req.body,
       });
       req.body.data = users.data;
-
       const result = await service.user.deleteAll(req.body);
       res.json(result);
     } catch (error) {
