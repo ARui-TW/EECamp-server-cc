@@ -1,7 +1,6 @@
-import fs, { unlink, unlinkSync } from 'fs';
+import fs, { unlinkSync } from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import res from 'express/lib/response';
 import model from '../models';
 import logger from '../libs/logger';
 
@@ -12,10 +11,10 @@ const fileService = {
         data, fileName, fileType, description,
       } = params;
       const rootDir = process.cwd();
-      const path = `/public/${uuidv4()}_${fileName}`;
-      fs.writeFileSync(`${rootDir}${path}`, data);
+      const filePath = `/public/${uuidv4()}_${fileName}`;
+      fs.writeFileSync(path.join(rootDir, filePath), data);
       const result = model.File.create({
-        name: fileName, type: fileType, description, path,
+        name: fileName, type: fileType, description, path: filePath,
       });
       logger.info('[File Service] Upload one success');
       return result;
@@ -33,10 +32,10 @@ const fileService = {
         data, fileName,
       } = params;
       const rootDir = process.cwd();
-      const path = `/public/${uuidv4()}_${fileName}`;
-      fs.writeFileSync(`${rootDir}${path}`, data);
+      const filePath = `/public/${uuidv4()}_${fileName}`;
+      fs.writeFileSync(`${rootDir}${filePath}`, data);
       logger.info('[File Service] Save one success');
-      return { path };
+      return { filePath };
     } catch (error) {
       logger.error(
         '[File Service] Failed to save file to database:',

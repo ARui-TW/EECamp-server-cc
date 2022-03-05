@@ -110,7 +110,6 @@ const fileController = {
       validator.validate(req.body, rule);
       const path = await service.file.findOne(req.body);
       req.body = { ...req.body, path: path.path };
-      console.log(req.body);
       const result = await service.file.deleteOne(req.body);
       res.json(result);
     } catch (error) {

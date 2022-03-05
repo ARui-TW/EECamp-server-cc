@@ -2,7 +2,6 @@ import {
   isNationalIdentificationNumberValid, isResidentCertificateNumberValid,
   isNewResidentCertificateNumberValid,
 } from 'taiwan-id-validator';
-import path from 'path';
 import logger from '../libs/logger';
 import service from '../service';
 import validator from '../libs/validator';
