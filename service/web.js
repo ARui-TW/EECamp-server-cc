@@ -36,7 +36,7 @@ const webService = {
     //     // eslint-disable-next-line no-param-reassign
     //     params.password = hashPassword;
     // }
-
+    logger.info('[Web Service] Update webs successfully');
     try {
       const result = await model.Web.updateOne({}, params).lean();
       return result.modifiedCount > 0 ? { success: true } : { success: false };
