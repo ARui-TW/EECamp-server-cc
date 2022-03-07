@@ -27,6 +27,7 @@ const webController = {
       },
       campPeople: {
         type: 'number',
+        convert: true,
       },
       campTime: {
         type: 'string',
@@ -51,6 +52,7 @@ const webController = {
       },
       registerFee: {
         type: 'number',
+        convert: true,
       },
       AnnounceTime: {
         type: 'string',
@@ -149,6 +151,7 @@ const webController = {
         },
         campPeople: {
           type: 'number',
+          convert: true,
           optional: true,
         },
         campTime: {
@@ -181,6 +184,7 @@ const webController = {
         },
         registerFee: {
           type: 'number',
+          convert: true,
           optional: true,
         },
         AnnounceTime: {
