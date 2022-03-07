@@ -10,6 +10,9 @@ $ npm install
 
 # listen to localhost:7002
 $ npm run dev
+
+# launch for production
+$ npm run start
 ```
 
 ## Services
