@@ -26,14 +26,24 @@ const connectMongo = async () => {
 
   mongoose.connection.on('error', (error) => {
     logger.error(`MongoDB connection error, ${error}`);
-    process.exit(1);
   });
 
-  await mongoose.connect(uri, {
-    keepAlive: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  const connectWithRetry = () => {
+    mongoose
+      .connect(uri, {
+        useNewUrlParser: true,
+        keepAlive: true,
+        useUnifiedTopology: true,
+      })
+      .then(() => logger.info('successfully connected to DB'))
+      .catch((e) => {
+        logger.error(e);
+        setTimeout(connectWithRetry, 5000);
+      });
+  };
+
+  connectWithRetry();
+
 };
 
 export default connectMongo;
