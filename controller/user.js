@@ -299,6 +299,7 @@ const userController = {
       alternateNum: {
         type: 'number',
         optional: true,
+        convert: true,
       },
     };
 
@@ -438,7 +439,8 @@ const userController = {
         optional: true,
       },
       status: {
-        type: 'forbidden',
+        type: 'enum',
+        values: ['GaveUp'],
         optional: true,
       },
       alternateNum: {

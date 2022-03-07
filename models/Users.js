@@ -14,6 +14,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  consentPath: {
+    type: String,
+    required: false,
+    default: '',
+  },
   personalID: {
     type: String,
     required: true,
@@ -119,6 +124,56 @@ const UserSchema = new mongoose.Schema({
   alternateNum: {
     type: Number,
     required: false,
+  },
+  paidTime: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  paidAmount: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  paidMethod: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  paidAccount: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  paidName: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  paidNote: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  comeMethod: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  comeTime: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  leaveMethod: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  leaveTime: {
+    type: String,
+    required: false,
+    default: '',
   },
 });
 
