@@ -11,10 +11,10 @@ const fileService = {
         data, fileName, fileType, description,
       } = params;
       const rootDir = process.cwd();
-      const filePath = `/public/${uuidv4()}_${fileName}`;
+      const filePath = `/public/${uuidv4()}_${decodeURIComponent(fileName)}`;
       fs.writeFileSync(path.join(rootDir, filePath), data);
       const result = model.File.create({
-        name: fileName, type: fileType, description, path: filePath,
+        name: decodeURIComponent(fileName), type: fileType, description, path: filePath,
       });
       logger.info('[File Service] Upload one success');
       return result;
@@ -32,7 +32,7 @@ const fileService = {
         data, fileName,
       } = params;
       const rootDir = process.cwd();
-      const filePath = `/public/${uuidv4()}_${fileName}`;
+      const filePath = `/public/${uuidv4()}_${decodeURIComponent(fileName)}`;
       fs.writeFileSync(`${rootDir}${filePath}`, data);
       logger.info('[File Service] Save one success');
       return { filePath };
