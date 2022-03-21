@@ -8,6 +8,7 @@ services:
       - ee-camp
     volumes:
       - ./:/app
+    restart: unless-stopped
   mongo:
     container_name: ee-camp-mongo
     image: mongo:5.0
@@ -20,7 +21,7 @@ services:
       - "27017"
     networks:
       - ee-camp
-    restart: on-failure
+    restart: unless-stopped
     command: mongod
 
 volumes:
@@ -28,4 +29,3 @@ volumes:
 
 networks:
   ee-camp:
-
