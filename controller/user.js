@@ -559,6 +559,14 @@ const userController = {
         ...req.body,
       });
 
+      user.data.forEach((element, index) => {
+        const { chineseName } = element;
+        const { length } = chineseName;
+        if (length > 1) {
+          user.data[index].chineseName = `${chineseName.substring(0, length - 2)}O${chineseName.substring(length - 1, length)}`;
+        }
+      });
+
       res.json(user);
     } catch (error) {
       logger.error('[User Controller] Failed to getUsers:', error);

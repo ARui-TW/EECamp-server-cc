@@ -12,7 +12,7 @@ connectMongo();
 // Body Parser
 app.use(express.json());
 app.use(express.raw({ type: 'image/*', limit: '15mb' }));
-app.use(express.raw({ type: 'application/pdf', limit: '5mb' }));
+app.use(express.raw({ type: 'application/pdf', limit: '15mb' }));
 app.use('/public', express.static('public'));
 
 // Router
