@@ -1,31 +1,12 @@
 version: "3.3"
 services:
   server:
-    build: .
+    image: arui1213/cc-server
     ports:
       - 7002:7002
     networks:
       - ee-camp
-    volumes:
-      - ./:/app
     restart: unless-stopped
-  mongo:
-    container_name: ee-camp-mongo
-    image: mongo:5.0
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
-    volumes:
-      - ee-camp-mongo:/data/db
-    expose:
-      - "27017"
-    networks:
-      - ee-camp
-    restart: unless-stopped
-    command: mongod
-
-volumes:
-  ee-camp-mongo:
 
 networks:
   ee-camp:

@@ -1,10 +1,10 @@
-FROM node:17.4
+FROM node:17-alpine
 
 WORKDIR /app
 
 COPY . .
 
-RUN npm i --only=prod
+RUN npm ci --omit=dev
 
 ENV HOST 0.0.0.0
 EXPOSE 80
