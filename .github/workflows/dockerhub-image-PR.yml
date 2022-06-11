@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: echo testing
         run: |
-          echo "GITHUB_SHA: ${GITHUB_SHA}"
+          echo ${GITHUB_SHA}
       - name: Checkout source
         uses: actions/checkout@v3
       - name: Set up QEMU
