@@ -38,8 +38,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${{ steps.branch-name.outputs.current_branch }}
             ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${{ steps.branch-name.outputs.current_branch }}-${{ env.IMAGE_VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${{ steps.branch-name.outputs.current_branch }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: BUILDX_QEMU_ENV=true
 
