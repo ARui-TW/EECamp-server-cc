@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: echo testing
         run: |
-          echo ${GITHUB_SHA}
+          echo ${secrets.DOCKERHUB_USERNAME}
       - name: Checkout source
         uses: actions/checkout@v3
       - name: Set up QEMU
@@ -28,7 +28,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${GITHUB_SHA}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${{ GITHUB_SHA }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: BUILDX_QEMU_ENV=true
       - name: Image digest
