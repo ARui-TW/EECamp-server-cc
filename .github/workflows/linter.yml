@@ -1,4 +1,4 @@
-name: CI
+name: ESLint CI
 on: push
   push:
     branches: ["main", "dev"]
@@ -10,5 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
       - name: Run ESLint
-        run: npx eslint --fix '**/*.js'
+        run: npm run lint
