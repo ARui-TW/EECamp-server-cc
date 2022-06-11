@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: echo testing
         run: |
-          echo "The branch name is: $GITHUB_REF_NAME"
+          echo "github ref: ${{ github.GITHUB_REF }}"
       - name: Checkout source
         uses: actions/checkout@v3
       - name: Set up QEMU
