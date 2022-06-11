@@ -8,7 +8,7 @@
     "dev": "npm run docker-compose-dev:up && cross-env NODE_ENV=dev nodemon --es-module-specifier-resolution=node app.js",
     "docker-compose-dev:up": "docker-compose -f docker-compose.dev.yml up -d",
     "docker-compose-dev:down": "docker-compose -f docker-compose.dev.yml down",
-    "lint": "npx eslint --fix '**/*.js"
+    "lint": "npx eslint --fix '**/*.js'"
   },
   "type": "module",
   "author": "",
@@ -21,6 +21,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "aws-sdk": "^2.1152.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
     "cors": "^2.8.5",
