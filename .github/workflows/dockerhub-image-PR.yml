@@ -1,4 +1,4 @@
-name: DockerHub Image CI PR
+name: DockerHub Image PR CI
 
 on:
   pull_request:
@@ -25,7 +25,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${ GITHUB_REF##*/}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:${{ GITHUB_REF_NAME }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: BUILDX_QEMU_ENV=true
       - name: Image digest
