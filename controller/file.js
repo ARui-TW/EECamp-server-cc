@@ -53,8 +53,8 @@ const fileController = {
       const savedImage = await service.file.saveOne(params);
       res.send(savedImage);
     } catch (error) {
-      logger.error('[File Controller] Failed to upload file:', error);
-      res.status(400).json({ message: `Failed to upload file, ${error}` });
+      logger.error('[File Controller] Failed to save file:', error);
+      res.status(400).json({ message: `Failed to save file, ${error}` });
     }
   },
   async getFile(req, res) {

@@ -43,7 +43,6 @@ const connectMongo = async () => {
   };
 
   connectWithRetry();
-
 };
 
 export default connectMongo;
