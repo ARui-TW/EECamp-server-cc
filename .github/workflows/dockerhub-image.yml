@@ -2,10 +2,26 @@ name: DockerHub Image CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "dev", "staging"]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Install modules
+        run: npm ci
+
+      - name: Run lint fix
+        run: npm run lintfix
+
+      - name: Run linter
+        run: npm run lint
+
   docker:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -23,9 +39,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v5.2
+
       - name: Set some variables for the image
         run: |
           echo "IMAGE_VERSION=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+          if [ ${{ steps.branch-name.outputs.current_branch }} == "main" ]; then
+            echo "IMAGE_NAME=latest" >> $GITHUB_ENV
+          else
+            echo "IMAGE_NAME=${{ steps.branch-name.outputs.current_branch }}" >> $GITHUB_ENV
+          fi
+      - name: Get environment variables
+        run: |
+          touch .env
+          touch private.key
+          touch public.key.pub
+          echo "${{ secrets.ENV_FILE }}" >> .env
+          echo "${{ secrets.PRIVATE_KEY }}" >> .private.key
+          echo "${{ secrets.PUBLIC_KEY }}" >> .public.key.pub
 
       - name: Build and push
         id: docker_build
@@ -34,8 +67,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:main-${{ env.IMAGE_VERSION }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/cc-server:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/cc-web:${{ steps.branch-name.outputs.current_branch }}-${{ env.IMAGE_VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/cc-web:${{ env.IMAGE_NAME }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: BUILDX_QEMU_ENV=true
 
